@@ -174,132 +174,208 @@ The following definitions describe the output of `riak-repl status`. Please note
 
 How to access number of objects sent, number of objects pending, number of objects dropped via JSON stats:
 
-- *source*
-	- *source_stats*
-		- *rt_source_connected_to* 
+- **source**
+	- **source_stats**
+		- **rt_source_connected_to** 
 			
 			The name of the sink cluster that the source cluster is connected. *Soon to be renamed.*
 			
-		- *connected*
+		- **connected**
 		
 			<true/false> If true, then the source is connected to a sink.
 		
-		- *objects*
+		- **objects**
 			
 			<number> The number of realtime replication objects that have been successfully transmitted to the sink cluster.
 			
-		- *sent_seq*
+		- **sent_seq**
     	
     		<number> The last realtime queue sequence number that has been transmitted.
 
 
 
-- realtime_queue_stats:
+- **realtime_queue_stats**:
 
-	- *bytes* 
+	- **bytes** 
 	
-	The size in bytes of all objects currently in the realtime queue.
+		The size in bytes of all objects currently in the realtime queue.
 	
-	- *consumers* 
+	- **consumers** 
 	
-	A list of source consumers of the realtime queue.
+		A list of source consumers of the realtime queue.
 	
-	- *sinkclustername*
+	- **sinkclustername**
 	
-	A consumer of the realtime queue.
+		A consumer of the realtime queue.
 	
-	- *drops* 
+	- **drops**
 	
-	The number of objects dropped from the realtime queue as the result of the queue being full or other errors.
+		The number of objects dropped from the realtime queue as the result of the queue being full or other errors.
 	
-	- *errs* 
+	- **errs** 
 	
-	The number of errors while pushing/popping from the realtime queue.
+		The number of errors while pushing/popping from the realtime queue.
 	
-	- *pending*
+	- **pending**
 	
-	The number of objects waiting to be sent to the sink cluster.	
-	- *unacked*
+		The number of objects waiting to be sent to the sink cluster.	
+	- **unacked**
 	
-	The number of objects waiting to be acknowledged by a queue consumer.
+		The number of objects waiting to be acknowledged by a queue consumer.
 
 
-- *rt_dirty*
+	- **rt_dirty**
 
-	The number of rt_source_errors and/ort rt_sink errors have been detected. ***This value will persist across restarts until a fullsync is complete.***
+		The number of rt_source_errors and/ort rt_sink errors have been detected. ***This value will persist across restarts until a fullsync is complete.***
 
-- *rt_sink_errors*
-	A sink error has been detected on the source node. This value will be reset to 0 after a node restarts.
+	- **rt_sink_errors**
+ 
+		A sink error has been detected on the source node. This value will be reset to 0 after a node restarts.
 
-- *rt_source_errors*
-	A source error has been detected on the source node. This value will be reset to 0 after a node restarts.
+	- **rt_source_errors**
+
+		A source error has been detected on the source node. This value will be reset to 0 after a node restarts.
 
 
 
 
 ###Fullsync Replication Statistics
 
-The fullsync_coordinator will only be populated on clusters that act as a source.
+***The fullsync_coordinator statistic will only be populated on clusters that act as a source.***
 
 
+#### Fullsync Coordinator Stats
 
-fullsync_coordinator: [ {<RemoteClusterName>: <fullsync_stats>}, ... ]
-	fullsync_stats:  {
-		cluser:  <RemoteClusterName>,
-		queued:  <PartitionsWaiting>, // Number of partitions that are waiting for an available process
-		in_progress: <PartitionsWaiting>, // Number of partitions what are being synced
-		starting:  <PartitionsIniting>, // Number of partitions getting a connection to remote cluster
-		successful_exits:  <PartitionsDone>, // Number of partitions successfully synced; when completed this will be the same number as total number of partitions in the ring
-		error_exits:  <PartitionsRequeued>, // If a sync failed or aborted, the partition will be queued again and try again later.
-		running_stats:  [ {<ProcessId>, <running_stats>}, …] // Any running sync processes are listed here.
-		socket:  {peername: <RemoteIP:Port>, sockname: <LocalIP:Port>},
-{fullsync_suggested,[ <NodeID>]},	// Realtime replication errors occurred on these nodes, a fullsync is suggested
-                         {fullsync_suggested_during_fs,[<NodeID>]}]}] // Realtime replication errors occurred on these nodes while a fullsync is already in progress, a fullsync is suggested after the current fullsync completes. These value will be moved to the fullsync_suggested value when the current fullsync complete.
+- **fullsync_coordinator**
 
-	}
-	running_stats:  {
-                      node:  <NodeInLocalCluster>,
-		site: <RemoteClusterName>,
-		strategy: fullsync,
-		fullsync_worker: <ProcessId>
-		socket: {peername:  <RemoteIP:Port>,sockname: <LocalIP:Port>},
-		state, <statename>,
-		fullsync, <PartitionKey>,
-		partition_start, <SecondsSincePartitionStart>
-		start_state, <SecondsSinceStateStart>
-		get_pool_size, <Number>
-	}
+	A list of {<sink_clustername>:<fullsync_stats>}.
 
-When acting as a sink:
-fullsync_coordinator_srv: [ {<LocalIP:Port>: <fullsync_coordinator_srv_stats>}, …]
-	fullsync_coordinator_srv_stats: {socket: <socket_stats>}
+	- **fullsync_stats**
+		- **cluster** <sink_clustername>
+		
+			The name of the sink cluster.
+		
+		- **queued** <partitions_waiting>
+		
+			The number of partitions that are waiting for an available process.
+			
+		- **in_progress** <partitions_waiting>
+		
+			The number of partitions that are being synced.
+		
+		- **starting** <partitions_waiting>
+		
+			The number of partitions connecting to remote cluster.
+		
+		- **successful_exits** <partitions_waiting>		
+			The number of partitions successfully synced; when completed this will be the same number as total number of partitions in the ring.
+		
+		- **error_exits** <partitions_waiting>
+		
+			If a sync failed or aborted, the partition will be queued again and try again later.
+			
+		- **running_stats**
+		
+			[ {<ProcessId>, <running_stats>}, …] // Any running sync processes are listed here.
+		
+		- **socket**
+				
+			See "Socket Statistics" below.
+				
+		- **fullsync_suggested**
+		
+			Realtime replication errors occurred on these nodes, a fullsync is suggested.
+		
+		- **fullsync_suggested_during_fs**
 
-Socket Stats
+			Realtime replication errors occurred on these nodes while a fullsync is already in progress, a fullsync is suggested after the current fullsync completes. These value will be moved to the fullsync_suggested value when the current fullsync complete.
+
+		**socket**:  {peername: <RemoteIP:Port>, sockname: <LocalIP:Port>},
+                          
+#### Running Stats
+
+***TODO*** This section needs work.
+
+- **running_stats**
+
+	- **node** <node_in_local_cluster>
+	
+	- **site** <sink_clustername>
+
+	- **strategy**: fullsync
+
+	- **fullsync_worker** <ProcessId>
+
+	- **socket** {peername:  <RemoteIP:Port>,sockname: <LocalIP:Port>}
+
+	- **state** <statename>
+
+	- **fullsync** <PartitionKey>
+
+	- **partition_start** <SecondsSincePartitionStart>
+
+	- **start_state** <SecondsSinceStateStart>
+
+	- **get_pool_size** <Number>                         
+
+
+***When acting as a sink:***
+
+- **fullsync_coordinator_srv**: [ {<LocalIP:Port>: <fullsync_coordinator_srv_stats>}, …]
+	
+	- **fullsync_coordinator_srv_stats**: {socket: <socket_stats>}
+
+
+####Socket Statistics
 
 Many sections of the status output include a “socket” section. A reading is taken once every 10 seconds, and the last 7 readings are stored.
 
-"socket": {
-   "peername": "127.0.0.1:9086", The address and port for the other end of a connection.
-   "recv_avg": "[32, 32]", 	Average size of packets in bytes received to the socket
-   "recv_cnt": "[0]", 		Number of packets received to the socket.
-   "recv_dvi": "[0, 0]", 		Average packet size deviation in bytes received to the socket.
-   "recv_kbps": "[0]", 		Socket kilobits/second received.
-   "recv_max": "[33, 33]", 	The size of the largest packet in bytes received to the socket.
-   "send_cnt": "[0]", 		Number of packets sent from the socket.
-   "send_kbps": "[0]", 		Socket kilobits/second sent.
-   "send_pend": "[0, 0]", 	The number of bytes in the Erlang VM to be sent over the socket.
-   "sockname": "127.0.0.1:57559" The address and port for “this end” of the connection.
-}
-
+- socket
+   - **peername** <ip:port> 
+   
+   		The address and port for the other end of a connection.
+   
+   - **recv_avg** [reading, reading, …]
+   
+		The average size of packets in bytes received to the socket
+   
+   - **recv_cnt** [reading, reading, …]
+   
+		The number of packets received by the socket.
+   
+   - **recv_dvi** [reading, reading, …]
+   
+		The average packet size deviation in bytes received by the socket.
+   
+   - **recv_kbps** [reading, reading, …]
+   
+   		Socket kilobits/second received.
+   
+   - **recv_max** [reading, reading, …]
+   
+    	Size of the largest packet in bytes received to the socket.
+   
+   - **send_cnt** [reading, reading, …]
+   
+   		Number of packets sent from the socket.
+   
+   - **send_kbps** [reading, reading, …]
+   
+   		Socket kilobits/second sent.
+   
+   - **send_pend** [reading, reading, …]
+   
+    	The number of bytes in the Erlang VM to be sent over the socket.
+   
+   - **sockname** <host:port>
+   
+   		The address and port for “this end” of the connection.
+  
 
 
 
 
-
-
-
-
-# Stats below need to be weeded out!
+# Stats below need to be weeded out for BNW!
 
 
 * **listener_[nodeid]**: "ip:port"
