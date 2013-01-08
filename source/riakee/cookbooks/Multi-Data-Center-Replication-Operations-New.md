@@ -330,7 +330,8 @@ How to access number of objects sent, number of objects pending, number of objec
 
 Many sections of the status output include a “socket” section. A reading is taken once every 10 seconds, and the last 7 readings are stored.
 
-- socket
+- **socket**
+
    - **peername** <ip:port> 
    
    		The address and port for the other end of a connection.
@@ -372,15 +373,12 @@ Many sections of the status output include a “socket” section. A reading is 
    		The address and port for “this end” of the connection.
   
 
-
-
-
-# Stats below need to be weeded out for BNW!
+# Riak 1.2 Replication Statistics
 
 
 * **listener_[nodeid]**: "ip:port"
 
-    Defines a replication listener that is running on node [nodeid].
+    Defines a replication listener that is running on node [nodeid]. 
 
 * **[sitename]_ips**
 
