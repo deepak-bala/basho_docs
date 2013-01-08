@@ -161,6 +161,33 @@ The ‘max_fssink_node’ limits the number of fullsync workers allowed to run o
 * *Example* `riak-repl fullsync max_fssink_cluster 5`
 
 
+### Mixing Replication v 1.2 with Replication v 1.3
+
+Riak Replication v 1.2 and Replication v 1.3 can be safely used at the same time. If you choose to move to 1.3 Replication completely, it is recommended to disable 1.2 realtime replication bucket hooks with the `riak-repl modes` command. 
+
+**riak-repl modes**
+
+* *Syntax* `riak-repl modes <modelist>` 
+	* `modelist` is one or both of mode_repl12, mode_repl13 separated by ***spaces*** (without commas).
+
+* *Example* 
+
+```
+riak-repl modes mode_repl12 mode_repl13
+Current replication modes: [mode_repl12,mode_repl13]
+```
+
+To check the current replication modes:
+
+* *Syntax* `riak-repl modes` 
+
+* *Example*
+```
+riak-repl modes
+Current replication modes: [mode_repl12,mode_repl13]
+```
+
+
 
 ## riak-repl status output
 
