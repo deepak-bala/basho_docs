@@ -125,11 +125,9 @@ If the application configuration `fullsync_on_connect` is set to false, a fullsy
 
 **fullsync max_fssource_node**
 
-The `max_fssource_node` limits the number of fullsync workers that will be running on each individual node in a source cluster.  This is a hard limit for all fullsyncs enabled; additional fullsync configurations will not increase the number of fullsync workers allowed to run on any node. This value defaults to 2. This only affects nodes on the source cluster on which this parameter is defined via the configuration file or command line.
+The `max_fssource_node` limits the number of fullsync workers that will be running on each individual node in a source cluster.  This is a hard limit for all fullsyncs enabled; additional fullsync configurations will not increase the number of fullsync workers allowed to run on any node. This value defaults to 2. This only affects nodes on the source cluster on which this parameter is defined via the configuration file or command line. This value can be made persistent via the `max_fssource_node` configuration variable in app.config. See the Configuration guide for more information.
 
-Example: ***TODO*** move to configuration section
-{max_fssource_node, 2}
-
+Example: 
 
 * *Syntax* `riak-repl fullsync max_fssource_node <value>`
 * *Default* 2
@@ -138,12 +136,9 @@ Example: ***TODO*** move to configuration section
 
 **fullsync max_fssource_cluster**
 
-The ‘max_fssource_cluster’ is the hard limit of fullsync workers that will be running on the source side of a cluster across all nodes on that cluster for a fullsync to a sink cluster.  This means if one has configured fullsync for two different clusters, both with a max_fssource_cluster of 5, 10 fullsync workers can be in progress.  This value defaults to 5. Only affects nodes on the source cluster on which this parameter is defined via the configuration file or command line.
+The ‘max_fssource_cluster’ is the hard limit of fullsync workers that will be running on the source side of a cluster across all nodes on that cluster for a fullsync to a sink cluster.  This means if one has configured fullsync for two different clusters, both with a max_fssource_cluster of 5, 10 fullsync workers can be in progress.  This value defaults to 5. Only affects nodes on the source cluster on which this parameter is defined via the configuration file or command line. This value can be made persistent via the `max_fssource_cluster` configuration variable in app.config. See the Configuration guide for more information.
 
-
-Example: Example: ***TODO*** move to configuration section
-{max_fssource_cluster, 5}
-
+Example: 
 
 * *Syntax* `riak-repl fullsync max_fssource_cluster <value>`
 * *Default* 5
@@ -153,7 +148,8 @@ Example: Example: ***TODO*** move to configuration section
 
 **fullsync max_fssink_node**
 
-The ‘max_fssink_node’ limits the number of fullsync workers allowed to run on each individual node in a sink cluster.  This is a hard limit for all fullsync sources interacting with the sink cluster. Thus, multiple simultaneous source connections to the sink cluster will have to share the sink node’s number of maximum connections. This value defaults to 2. Only affects nodes on the sink cluster on which this parameter is defined via the configuration file or command line.
+The ‘max_fssink_node’ limits the number of fullsync workers allowed to run on each individual node in a sink cluster.  This is a hard limit for all fullsync sources interacting with the sink cluster. Thus, multiple simultaneous source connections to the sink cluster will have to share the sink node’s number of maximum connections. This value defaults to 2. Only affects nodes on the sink cluster on which this parameter is defined via the configuration file or command line. This value can be made persistent via the `max_fssink_cluster` configuration variable in app.config. See the Configuration guide for more information.
+
 
 * *Syntax* `riak-repl fullsync max_fssink_cluster <value>`
 * *Default* 2
@@ -320,8 +316,6 @@ How to access number of objects sent, number of objects pending, number of objec
 		**socket**:  {peername: <RemoteIP:Port>, sockname: <LocalIP:Port>},
                           
 #### Running Stats
-
-***TODO*** This section needs work.
 
 - **running_stats**
 
