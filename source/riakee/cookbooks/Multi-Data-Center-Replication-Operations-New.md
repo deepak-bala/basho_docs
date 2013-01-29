@@ -13,7 +13,7 @@ keywords: [mdc, repl, operator, bnw]
 
 Replication is controlled by the `riak-repl` command. Usage:
 
-### Cluster Connectivity
+## Cluster Connectivity
 
 **clustername**
 
@@ -57,7 +57,7 @@ Disconnecting a source cluster from a sink cluser can be done either by host:por
 
 
 
-###Realtime Replication Configuration
+##Realtime Replication Configuration
 
 **realtime enable**
 
@@ -92,7 +92,7 @@ To start or stop replication for all configured sink clusters:
 * *Example* `riak-repl realtime stop`
 
 
-###Fullsync Replication Configuration
+##Fullsync Replication Configuration
 
 **fullsync enable**
 
@@ -122,7 +122,7 @@ If the application configuration `fullsync_on_connect` is set to false, a fullsy
 * *Enable* `riak-repl fullsync stop Austin`
 
 
-### Tuning
+##Tuning
 
 **fullsync max_fssource_node**
 
@@ -158,7 +158,7 @@ The ‘max_fssink_node’ limits the number of fullsync workers allowed to run o
 * *Example* `riak-repl fullsync max_fssink_cluster 5`
 
 
-### Mixing Replication v 1.2 with Replication v 1.3
+##Mixing Replication v 1.2 with Replication v 1.3
 
 Riak Replication v 1.2 and Replication v 1.3 can be safely used at the same time. If you choose to move to 1.3 Replication completely, it is recommended to disable 1.2 realtime replication bucket hooks with the `riak-repl modes` command. 
 
@@ -185,14 +185,16 @@ Current replication modes: [mode_repl12,mode_repl13]
 ```
 
 
-## riak-repl status output
+
+##riak-repl status output
+=======
 
 The following definitions describe the output of `riak-repl status`. Please note that many of these statistics will only appear on the current leader node. Riak 1.2 and 1.3 replication statistics are both obtained by using the `riak-repl status` command.
 
 **All statistic counts will be reset to 0 upon restarting Riak EE unless otherwise noted.**
 
 
-###Realtime Replication Statistics
+##Realtime Replication Statistics
 
 
 - **source**
@@ -260,12 +262,12 @@ The following definitions describe the output of `riak-repl status`. Please note
 
 
 
-###Fullsync Replication Statistics
+##Fullsync Replication Statistics
 
 ***The fullsync_coordinator statistic will only be populated on clusters that act as a source.***
 
 
-#### Fullsync Coordinator Stats
+##Fullsync Coordinator Stats
 
 - **fullsync_coordinator**
 
@@ -313,7 +315,7 @@ The following definitions describe the output of `riak-repl status`. Please note
 
 		**socket**:  {peername: <RemoteIP:Port>, sockname: <LocalIP:Port>},
                           
-#### Running Stats
+##Running Stats
 
 - **running_stats**
 
@@ -375,7 +377,7 @@ The following statistics will be available on sink clusters:
 
 	Statistics similar to the `fullsync_coordinator` will appear in this section.
 
-####Socket Statistics
+##Socket Statistics
 
 Many sections of the status output include a “socket” section. A reading is taken once every 10 seconds, and the last 7 readings are stored.
 
@@ -422,7 +424,7 @@ Many sections of the status output include a “socket” section. A reading is 
    		The address and port for “this end” of the connection.
   
 
-# Riak 1.2 Replication Statistics
+#Riak 1.2 Replication Statistics
 
 
 * **listener_[nodeid]**: "ip:port"
@@ -527,7 +529,7 @@ Many sections of the status output include a “socket” section. A reading is 
  
  * **server_stats**
  
-## Client Statistics
+##Client Statistics
 
    
 * **node** 
@@ -583,7 +585,7 @@ Many sections of the status output include a “socket” section. A reading is 
       * **wait_ack**
       
         
-## Server Statistics
+##Server Statistics
 
 * **node**
 * **site**
