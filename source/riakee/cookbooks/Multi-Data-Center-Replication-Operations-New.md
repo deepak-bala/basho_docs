@@ -8,6 +8,7 @@ audience: intermediate
 keywords: [mdc, repl, operator, bnw]
 ---
 
+## Riak 1.3 Replication Technology Preview Commands
 ## The riak-repl Command
 
 Replication is controlled by the `riak-repl` command. Usage:
@@ -184,24 +185,21 @@ Current replication modes: [mode_repl12,mode_repl13]
 ```
 
 
-
 ## riak-repl status output
 
-The following definitions describe the output of `riak-repl status`. Please note that many of these statistics will only appear on the current leader node.
+The following definitions describe the output of `riak-repl status`. Please note that many of these statistics will only appear on the current leader node. Riak 1.2 and 1.3 replication statistics are both obtained by using the `riak-repl status` command.
 
-**All counts will be reset to 0 upon restarting Riak EE unless otherwise noted.**
-
+**All statistic counts will be reset to 0 upon restarting Riak EE unless otherwise noted.**
 
 
 ###Realtime Replication Statistics
 
-How to access number of objects sent, number of objects pending, number of objects dropped via JSON stats:
 
 - **source**
 	- **source_stats**
 		- **rt_source_connected_to** 
 			
-			The name of the sink cluster that the source cluster is connected. *Soon to be renamed.*
+			The name of the ***sink*** cluster that the source cluster is connected. *Warning: this name may change in a future version of replication.*
 			
 		- **connected**
 		
@@ -319,33 +317,63 @@ How to access number of objects sent, number of objects pending, number of objec
 
 - **running_stats**
 
-	- **node** <node_in_local_cluster>
+	- **node** <node_in_local_cluster> 
 	
-	- **site** <sink_clustername>
+		The source node currently participating in fullsync replication.
+	
+	- **site** <sink_clustername> 
+	
+		The name of the sink cluster. *Warning: This will be renamed in future version of Riak* 
 
 	- **strategy**: fullsync
+	
+		The strategy that fulfills fullsync replication. In previous version of replication, different values could be configured. This value could be changed depending on your replication needs. 
 
 	- **fullsync_worker** <ProcessId>
+	
+		The Erlang process id of the fyllsync worker.
 
 	- **socket** {peername:  <RemoteIP:Port>,sockname: <LocalIP:Port>}
 
-	- **state** <statename>
+		Socket statistics for fullsync replication.
 
+	- **state** <statename>
+	
+		The current state of fullsync replication. They can be used by Basho support to identify replication issues.
+
+		* **wait_for_partition**
+   		* **build_keylist**
+    	* **wait_keylist**    
+    	* **diff_bloom**
+    	* **diff_keylist**
+    
 	- **fullsync** <PartitionKey>
+	
+		The partition that is currently being synchronized with the sink cluster.
 
 	- **partition_start** <SecondsSincePartitionStart>
+	
+		Elapsed time in seconds since the **fullsync** partition started replication to a sink.
 
-	- **start_state** <SecondsSinceStateStart>
+	- **stage_start** <SecondsSinceStageStart>
 
+		Elapsed time in seconds since the **state** started running on the source.
+		
 	- **get_pool_size** <Number>                         
 
+		The number of workers that are used to read data from Riak during a fullsync.
 
 ***When acting as a sink:***
+	
+The following statistics will be available on sink clusters:
 
 - **fullsync_coordinator_srv**: [ {<LocalIP:Port>: <fullsync_coordinator_srv_stats>}, …]
 	
+	`fullsync_coordinator_srv` is the sink end of the fullsync coordinator.
+	
 	- **fullsync_coordinator_srv_stats**: {socket: <socket_stats>}
 
+	Statistics similar to the `fullsync_coordinator` will appear in this section.
 
 ####Socket Statistics
 
@@ -571,7 +599,8 @@ Please see the definitions in the **Client Statistics** section.
 * **state**
   * State shows what the current replication strategy is currently processing. 
   
-  * The following definitions appear in the status output if keylist strategy is being used. They can be used by Basho support to identify replication issues.    * **wait_for_partition**
+  * The following definitions appear in the status output if keylist strategy is being used. They can be used by Basho support to identify replication issues.    
+    * **wait_for_partition**
     * **build_keylist**
     * **wait_keylist**    
     * **diff_bloom**
